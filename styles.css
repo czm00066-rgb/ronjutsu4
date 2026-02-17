@@ -146,4 +146,17 @@ textarea{
 }
 .speedmeta{display:flex; justify-content:space-between; color:var(--muted); font-weight:800; margin: 8px 0 10px;}
 
-textarea::placeholder{color: var(--muted2); font-size: 12px;}
+textarea::placeholder{color: rgba(127,139,176,.55); font-size: 11px;}
+
+.iconbtn{
+  width:44px;
+  height:44px;
+  border-radius: 12px;
+  border: 1px solid rgba(34,48,74,.9);
+  background: rgba(11,15,23,.35);
+  color: var(--muted);
+  font-weight: 900;
+  cursor: pointer;
+}
+.iconbtn:active{transform: translateY(1px);}
+.navright{display:flex; align-items:center; gap:10px;}

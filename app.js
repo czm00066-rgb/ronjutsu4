@@ -73,7 +73,6 @@ function updateTotal(arr,outEl){
 }
 /* practice */
 const caseSelect=$('#caseSelect');
-const themeEl=$('#theme');
 const caseEl=$('#caseText');
 const modelCard=$('#modelCard');
 const modelText=$('#modelText');
@@ -97,7 +96,6 @@ S4_QUESTIONS.forEach((q,idx)=>{
 function loadPractice(i){
   pIndex=i;
   const q=S4_QUESTIONS[pIndex];
-  themeEl.textContent=q.theme;
   caseEl.textContent=q.case;
   pModelShown=false; modelCard.style.display='none';
   toggleModelBtn.textContent='模範を表示';
@@ -106,6 +104,23 @@ function loadPractice(i){
   updateTotal(pInputs,totalCountEl);
 }
 caseSelect.addEventListener('change',()=>loadPractice(parseInt(caseSelect.value,10)));
+
+const prevCaseBtn = $('#prevCaseBtn');
+const nextCaseBtn = $('#nextCaseBtn');
+if (prevCaseBtn && nextCaseBtn){
+  prevCaseBtn.addEventListener('click',()=>{
+    const cur = parseInt(caseSelect.value,10) || 0;
+    const nxt = (cur - 1 + S4_QUESTIONS.length) % S4_QUESTIONS.length;
+    caseSelect.value = String(nxt);
+    loadPractice(nxt);
+  });
+  nextCaseBtn.addEventListener('click',()=>{
+    const cur = parseInt(caseSelect.value,10) || 0;
+    const nxt = (cur + 1) % S4_QUESTIONS.length;
+    caseSelect.value = String(nxt);
+    loadPractice(nxt);
+  });
+}
 
 toggleModelBtn.addEventListener('click',()=>{
   pModelShown=!pModelShown;
