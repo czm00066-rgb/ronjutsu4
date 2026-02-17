@@ -106,6 +106,8 @@ body{
 }
 .linehead{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:6px;}
 .lno{font-weight:900;}
+.lbl{color:var(--muted2); font-size:12px; font-weight:800;}
+
 .count{color:var(--muted2); font-size:12px; font-weight:800;}
 textarea{
   width:100%;
@@ -143,3 +145,5 @@ textarea{
   font-size: 12px;
 }
 .speedmeta{display:flex; justify-content:space-between; color:var(--muted); font-weight:800; margin: 8px 0 10px;}
+
+textarea::placeholder{color: var(--muted2); font-size: 12px;}

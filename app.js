@@ -27,6 +27,25 @@ function toast(msg){
   el.textContent=msg; el.style.display='block';
   clearTimeout(toastTimer); toastTimer=setTimeout(()=>{ el.style.display='none'; },1100);
 }
+
+const LINE_LABELS = [
+  "① 受容",
+  "② 自己理解 ～ 自分を整理する",
+  "③ 仕事理解 ～ 仕事を整理する",
+  "④ 自分軸で仕事を評価 ～ 自分と仕事のマッチング検討",
+  "⑤ 比較検討 ～ 選択肢を具体的に比べる",
+  "⑥ 主体的意思決定 ～ 自分で決める"
+];
+
+const LINE_PLACEHOLDERS = [
+  "〇〇について受容的・共感的に受け止め信頼関係を維持する。",
+  "その上で〇〇を整理し自己理解を促す。",
+  "〇〇を確認し仕事理解を促す。",
+  "〇〇（自己理解）と、〇〇（仕事理解）を、照らし合わせて、〇〇が可能か具体的に比較検討を促す／照合する／すり合わせる／適合性を検討する",
+  "Ａ案と、Ｂ案を比較し、判断軸の明確化を促す。",
+  "最終的に相談者自身が納得できる目標を設定し主体的に取り組めるよう支援する。"
+];
+
 /* tabs */
 const tabBtns=$$('.tab');
 tabBtns.forEach(btn=>btn.addEventListener('click',()=>{
@@ -41,8 +60,8 @@ function buildSixInputs(container,onUpdate){
   for(let i=0;i<6;i++){
     const box=document.createElement('div');
     box.className='lineinput';
-    box.innerHTML=`<div class="linehead"><div class="lno">${i+1}行目</div><div class="count"><span data-count>0</span> 文字</div></div>
-                   <textarea spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="（ここに入力）"></textarea>`;
+    box.innerHTML=`<div class="linehead"><div class="lno">${i+1}行目</div><div class="lbl">${LINE_LABELS[i]}</div><div class="count"><span data-count>0</span> 文字</div></div>
+                   <textarea spellcheck="false" autocapitalize="off" autocomplete="off" placeholder="${LINE_PLACEHOLDERS[i]}"></textarea>`;
     const ta=$('textarea',box); const c=$('[data-count]',box);
     ta.addEventListener('input',()=>{ c.textContent=String(charCount(ta.value)); onUpdate(); });
     container.appendChild(box); arr.push({ta,c});
