@@ -146,8 +146,9 @@ textarea{
 }
 .speedmeta{display:flex; justify-content:space-between; color:var(--muted); font-weight:800; margin: 8px 0 10px;}
 
-textarea::placeholder{color: rgba(127,139,176,.55); font-size: 11px;}
+textarea::placeholder{color: rgba(127,139,176,.45); font-size: 10.5px;}
 
+.navright{display:flex; align-items:center; gap:10px;}
 .iconbtn{
   width:44px;
   height:44px;
@@ -159,4 +160,3 @@ textarea::placeholder{color: rgba(127,139,176,.55); font-size: 11px;}
   cursor: pointer;
 }
 .iconbtn:active{transform: translateY(1px);}
-.navright{display:flex; align-items:center; gap:10px;}
