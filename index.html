@@ -1,117 +1,100 @@
+
 <!doctype html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
-  <title>設問4 トレーニング</title>
-  <link rel="stylesheet" href="./styles.css"/>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>S4 Trainer</title>
+<style>
+body{font-family:sans-serif;background:#0f172a;color:#fff;padding:20px}
+textarea{width:100%;min-height:70px;font-size:16px;margin-top:6px}
+.line{margin-bottom:14px;padding:10px;background:#1e293b;border-radius:10px}
+.count{font-size:12px;color:#94a3b8}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="brand">
-      <div class="dot"></div>
-      <div>
-        <div class="title">設問4 トレーニング</div>
-        <div class="subtitle">6行方針｜受容→自己理解→仕事理解→結び付け→比較→主体化</div>
-      </div>
-    </div>
-    <div class="tabs" role="tablist" aria-label="Modes">
-      <button class="tab active" data-tab="practice" role="tab">通常練習</button>
-      <button class="tab" data-tab="speed10" role="tab">スピード10連続</button>
-    </div>
-  </header>
 
-  <main class="wrap">
-    <section id="practice" class="panel active">
-      <div class="row">
-        <div class="card">
-          <div class="card-h">
-            <div>
-              <div class="kicker">テーマ</div>
-              <div id="theme" class="hline"></div>
-            </div>
-            <div class="right">
-              <select id="caseSelect" class="select"></select>
-            </div>
-          </div>
+<h2>設問4 トレーニング</h2>
+<select id="caseSelect"></select>
+<div id="caseBox" style="margin:12px 0;padding:10px;background:#1e293b;border-radius:10px"></div>
 
-          <div class="casebox" id="caseText"></div>
+<div id="inputs"></div>
 
-          <div class="btnrow">
-            <button class="btn ghost" id="clearAnswerBtn">この回答を消す</button>
-            <button class="btn ghost" id="copyAnswerBtn">回答をコピー</button>
-            <button class="btn" id="toggleModelBtn">模範を表示</button>
-            <button class="btn ghost" id="copyModelBtn">模範をコピー</button>
-          </div>
+<div style="margin-top:10px">合計文字数：<span id="total">0</span></div>
 
-          <div class="grid6" id="inputs"></div>
+<script type="module">
+import { S4_QUESTIONS } from './questions_s4.js';
 
-          <div class="totals">
-            <div>合計：<span id="totalCount">0</span> 文字</div>
-            <div class="hint">※ iPad + Apple Pencil（スクリブル）対応：そのまま手書き入力OK</div>
-          </div>
-        </div>
+const templates = [
+"〇〇について受容的・共感的に受け止め信頼関係を維持する。",
+"その上で〇〇を整理し自己理解を促す。",
+"〇〇を確認し仕事理解を促す。",
+"〇〇（自己理解）と、〇〇（仕事理解）を、照らし合わせて、〇〇が可能か具体的に比較検討を促す／照合する／すり合わせる／適合性を検討する",
+"Ａ案と、Ｂ案を比較し、判断軸の明確化を促す。",
+"最終的に相談者自身が納得できる目標を設定し主体的に取り組めるよう支援する。"
+];
 
-        <div class="card" id="modelCard" style="display:none;">
-          <div class="card-h">
-            <div>
-              <div class="kicker">模範解答（6行）</div>
-              <div class="small">もう一度押すと非表示（トグル）</div>
-            </div>
-          </div>
-          <div class="modelbox" id="modelText"></div>
-        </div>
-      </div>
-    </section>
+const titles = [
+"① 受容",
+"② 自己理解 ～ 自分を整理する",
+"③ 仕事理解 ～ 仕事を整理する",
+"④ 自分軸で仕事を評価 ～ 自分と仕事のマッチング検討",
+"⑤ 比較検討 ～ 選択肢を具体的に比べる",
+"⑥ 主体的意思決定 ～ 自分で決める"
+];
 
-    <section id="speed10" class="panel">
-      <div class="card">
-        <div class="card-h">
-          <div>
-            <div class="kicker">スピード10連続</div>
-            <div class="small">まず「型」で反射化（6行を埋める）</div>
-          </div>
-          <div class="right">
-            <button class="btn" id="nextBtn">次へ</button>
-          </div>
-        </div>
+const caseSelect = document.getElementById("caseSelect");
+const caseBox = document.getElementById("caseBox");
+const inputsDiv = document.getElementById("inputs");
+const totalEl = document.getElementById("total");
 
-        <div class="speedmeta">
-          <div>進捗：<span id="sProg">1</span> / 10</div>
-          <div>ケース：<span id="sId"></span></div>
-        </div>
+S4_QUESTIONS.forEach((q,i)=>{
+  const opt=document.createElement("option");
+  opt.value=i;
+  opt.textContent=q.id+"｜"+q.theme;
+  caseSelect.appendChild(opt);
+});
 
-        <div class="casebox" id="sCase"></div>
+function charCount(str){return [...str].length}
 
-        <div class="btnrow">
-          <button class="btn ghost" id="sClearBtn">この回答を消す</button>
-          <button class="btn ghost" id="sCopyBtn">回答をコピー</button>
-          <button class="btn" id="sToggleModelBtn">模範を表示</button>
-        </div>
+function updateTotal(){
+  let sum=0;
+  document.querySelectorAll("textarea").forEach(t=>sum+=charCount(t.value));
+  totalEl.textContent=sum;
+}
 
-        <div class="grid6" id="sInputs"></div>
+function buildInputs(){
+  inputsDiv.innerHTML="";
+  for(let i=0;i<6;i++){
+    const div=document.createElement("div");
+    div.className="line";
+    div.innerHTML=`
+      <div><strong>${i+1}行目</strong>　${titles[i]}</div>
+      <textarea>${templates[i]}</textarea>
+      <div class="count">文字数：<span>0</span></div>
+    `;
+    const ta=div.querySelector("textarea");
+    const count=div.querySelector("span");
+    count.textContent=charCount(ta.value);
+    ta.addEventListener("input",()=>{
+      count.textContent=charCount(ta.value);
+      updateTotal();
+    });
+    inputsDiv.appendChild(div);
+  }
+  updateTotal();
+}
 
-        <div class="totals">
-          <div>合計：<span id="sTotal">0</span> 文字</div>
-        </div>
+function loadCase(i){
+  caseBox.textContent=S4_QUESTIONS[i].case;
+  buildInputs();
+}
 
-        <div class="card" id="sModelCard" style="display:none;margin-top:12px;">
-          <div class="card-h">
-            <div>
-              <div class="kicker">模範解答</div>
-              <div class="small">もう一度押すと非表示（トグル）</div>
-            </div>
-          </div>
-          <div class="modelbox" id="sModelText"></div>
-        </div>
-      </div>
-    </section>
-  </main>
+caseSelect.addEventListener("change",e=>loadCase(e.target.value));
 
-  <footer class="foot">
-    <span>© S4 Trainer</span>
-  </footer>
+loadCase(0);
 
-  <script type="module" src="./app.js"></script>
+</script>
+
 </body>
 </html>
