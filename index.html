@@ -7,23 +7,21 @@
 <title>S4 Trainer</title>
 <style>
 body{font-family:sans-serif;background:#0f172a;color:#fff;padding:20px}
-textarea{width:100%;min-height:70px;font-size:16px;margin-top:6px}
-.line{margin-bottom:14px;padding:10px;background:#1e293b;border-radius:10px}
+textarea{width:100%;min-height:70px;font-size:16px;margin-top:6px;background:#111827;color:#fff;border:1px solid #334155;border-radius:8px;padding:8px}
+textarea::placeholder{color:#6b7280}
+.line{margin-bottom:14px;padding:12px;background:#1e293b;border-radius:10px}
 .count{font-size:12px;color:#94a3b8}
 </style>
 </head>
 <body>
 
 <h2>設問4 トレーニング</h2>
-<select id="caseSelect"></select>
-<div id="caseBox" style="margin:12px 0;padding:10px;background:#1e293b;border-radius:10px"></div>
 
 <div id="inputs"></div>
 
 <div style="margin-top:10px">合計文字数：<span id="total">0</span></div>
 
-<script type="module">
-import { S4_QUESTIONS } from './questions_s4.js';
+<script>
 
 const templates = [
 "〇〇について受容的・共感的に受け止め信頼関係を維持する。",
@@ -43,56 +41,35 @@ const titles = [
 "⑥ 主体的意思決定 ～ 自分で決める"
 ];
 
-const caseSelect = document.getElementById("caseSelect");
-const caseBox = document.getElementById("caseBox");
-const inputsDiv = document.getElementById("inputs");
-const totalEl = document.getElementById("total");
-
-S4_QUESTIONS.forEach((q,i)=>{
-  const opt=document.createElement("option");
-  opt.value=i;
-  opt.textContent=q.id+"｜"+q.theme;
-  caseSelect.appendChild(opt);
-});
-
 function charCount(str){return [...str].length}
 
 function updateTotal(){
   let sum=0;
   document.querySelectorAll("textarea").forEach(t=>sum+=charCount(t.value));
-  totalEl.textContent=sum;
+  document.getElementById("total").textContent=sum;
 }
 
 function buildInputs(){
-  inputsDiv.innerHTML="";
+  const container=document.getElementById("inputs");
   for(let i=0;i<6;i++){
     const div=document.createElement("div");
     div.className="line";
     div.innerHTML=`
       <div><strong>${i+1}行目</strong>　${titles[i]}</div>
-      <textarea>${templates[i]}</textarea>
+      <textarea placeholder="${templates[i]}"></textarea>
       <div class="count">文字数：<span>0</span></div>
     `;
     const ta=div.querySelector("textarea");
     const count=div.querySelector("span");
-    count.textContent=charCount(ta.value);
     ta.addEventListener("input",()=>{
       count.textContent=charCount(ta.value);
       updateTotal();
     });
-    inputsDiv.appendChild(div);
+    container.appendChild(div);
   }
-  updateTotal();
 }
 
-function loadCase(i){
-  caseBox.textContent=S4_QUESTIONS[i].case;
-  buildInputs();
-}
-
-caseSelect.addEventListener("change",e=>loadCase(e.target.value));
-
-loadCase(0);
+buildInputs();
 
 </script>
 
